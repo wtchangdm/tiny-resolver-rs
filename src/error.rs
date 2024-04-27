@@ -11,9 +11,9 @@ pub enum Error {
 
 #[derive(Debug)]
 pub enum NameServerError {
-    NxDomain = 1,
+    FormatError = 1,
     ServerFailure = 2,
-    FormatError = 3,
+    NxDomain = 3,
     NotImplemented = 4,
     Refused = 5,
     Unknown = 6,
@@ -22,9 +22,9 @@ pub enum NameServerError {
 impl From<u16> for NameServerError {
     fn from(value: u16) -> NameServerError {
         match value {
-            1 => NameServerError::NxDomain,
+            1 => NameServerError::FormatError,
             2 => NameServerError::ServerFailure,
-            3 => NameServerError::FormatError,
+            3 => NameServerError::NxDomain,
             4 => NameServerError::NotImplemented,
             5 => NameServerError::Refused,
             _ => NameServerError::Unknown,
