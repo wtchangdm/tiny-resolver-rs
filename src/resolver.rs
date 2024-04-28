@@ -56,7 +56,6 @@ impl Resolver {
         let mut message = Self::resolve_answer(domain, record_type, &name_server_ip)?;
 
         while attempts < MAX_ATTEMPTS {
-            // my parsing logic
             if !message.answers.is_empty() {
                 return Ok(message);
             }
@@ -87,7 +86,6 @@ impl Resolver {
             println!("continue to look up {domain} with name server IP {name_server_ip}");
             message = Self::resolve_answer(domain, record_type, &name_server_ip)?;
 
-            // logic end
             attempts += 1;
         }
 
