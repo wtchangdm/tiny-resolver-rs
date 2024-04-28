@@ -1,4 +1,3 @@
-
 use rand::Rng;
 
 use crate::{utils, RecordClass, RecordType, ResourceRecord};
