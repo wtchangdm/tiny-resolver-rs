@@ -237,6 +237,7 @@ impl MessageQuestion {
             buf[qname_end_pos],
             buf[qname_end_pos + 1],
         ]))?;
+
         let q_class = RecordClass::try_from(u16::from_be_bytes([
             buf[qname_end_pos + 2],
             buf[qname_end_pos + 3],

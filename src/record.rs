@@ -334,7 +334,7 @@ impl ResourceRecord {
         let (name, name_end) = utils::parse_domain(buf, start_pos)?;
 
         // There need to be at least 2 + 2 + 4 + 2 bytes for TYPE, CLASS, TTL, and RDLENGTH fields.
-        if name_end + 10 > buf.len() {
+        if buf.len() < name_end + 10 {
             return Err(Error::ResolverError(
                 "resource record is out of bound".into(),
             ));
@@ -352,7 +352,7 @@ impl ResourceRecord {
         let rd_length = u16::from_be_bytes([buf[name_end + 8], buf[name_end + 9]]);
         let rdata_len = name_end + 10 + rd_length as usize;
 
-        if rdata_len > buf.len() {
+        if buf.len() < rdata_len {
             return Err(Error::ResolverError(format!(
                 "resource record doesn't contain enough space for RDATA, expect: {}, got: {}",
                 rdata_len,
