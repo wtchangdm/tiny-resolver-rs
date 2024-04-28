@@ -34,11 +34,6 @@ impl From<u16> for NameServerError {
 
 impl PartialEq for Error {
     fn eq(&self, other: &Self) -> bool {
-        match (self, other) {
-            (Error::InvalidHostname, Error::InvalidHostname) => true,
-            (Error::ServerError(_), Error::ServerError(_)) => true,
-            (Error::NetworkError(_), Error::NetworkError(_)) => false,
-            _ => false,
-        }
+        matches!((self, other), (Error::InvalidHostname, Error::InvalidHostname))
     }
 }
