@@ -14,7 +14,7 @@ impl Resolver {
     fn extract_domains(records: &[ResourceRecord], record_type: &RecordType) -> Vec<String> {
         records
             .iter()
-            .filter(|rr| rr.rr_type == *record_type)
+            .filter(|rr| rr.r_type == *record_type)
             .filter_map(|rr| match &rr.r_data {
                 RecordData::NS(domain) => Some(domain.to_owned()),
                 _ => None,
@@ -26,7 +26,7 @@ impl Resolver {
         records
             .iter()
             .filter_map(|rr| {
-                if rr.rr_type == RecordType::A {
+                if rr.r_type == RecordType::A {
                     rr.ipv4_ip()
                 } else {
                     None

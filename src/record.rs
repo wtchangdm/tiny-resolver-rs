@@ -313,9 +313,9 @@ pub struct ResourceRecord {
     pub name: String,
     /// `TYPE`: two octets containing one of the RR type codes.
     /// This field specifies the meaning of the data in the RDATA field.
-    pub rr_type: RecordType,
+    pub r_type: RecordType,
     // `CLASS`: two octets which specify the class of the data in the RDATA field.
-    pub rr_class: RecordClass,
+    pub r_class: RecordClass,
     // `TTL`: a 32 bit unsigned integer that specifies the time interval (in seconds) that the resource record may be cached before it should be discarded.
     // Zero values are interpreted to mean that the RR can only be used for the transaction in progress, and should not be cached.
     pub ttl: u32,
@@ -364,8 +364,8 @@ impl ResourceRecord {
 
         let rr = Self {
             name,
-            rr_type,
-            rr_class,
+            r_type: rr_type,
+            r_class: rr_class,
             ttl,
             rd_length,
             r_data,
