@@ -44,7 +44,7 @@ pub(crate) fn parse_domain(buf: &[u8], start_pos: usize) -> Result<(String, usiz
 
             if is_compressed {
                 if curr_pos + 1 >= buf.len() {
-                    return Err(Error::ResolverError("QNAME is malformed".into()));
+                    return Err(Error::ResolverError("domain is malformed".into()));
                 }
 
                 // 0x3FFF = 0b0011111111111111, use this to set first 2 bits (out of 16 bits) of the pointer to zero.
@@ -65,11 +65,11 @@ pub(crate) fn parse_domain(buf: &[u8], start_pos: usize) -> Result<(String, usiz
                 curr_pos += 1;
 
                 if curr_pos + len >= buf.len() {
-                    return Err(Error::ResolverError("QNAME is out of bound".into()));
+                    return Err(Error::ResolverError("domain is out of bound".into()));
                 }
 
                 let label = std::str::from_utf8(&buf[curr_pos..curr_pos + len])
-                    .map_err(|_| Error::ResolverError("QNAME contains invalid characters".into()))?;
+                    .map_err(|_| Error::ResolverError("domain contains invalid characters".into()))?;
                 domain.push_str(label);
 
                 curr_pos += len;
