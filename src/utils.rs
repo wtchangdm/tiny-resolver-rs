@@ -47,7 +47,7 @@ pub(crate) fn parse_domain(buf: &[u8], start_pos: usize) -> Result<(String, usiz
                     return Err(Error::ResolverError("QNAME is malformed".into()));
                 }
 
-                // 0x03FF = 0b0011111111111111, use this to set first 2 bits (out of 16 bits) of the pointer to zero.
+                // 0x3FFF = 0b0011111111111111, use this to set first 2 bits (out of 16 bits) of the pointer to zero.
                 let offset =
                     (u16::from_be_bytes([buf[curr_pos], buf[curr_pos + 1]]) & 0x3FFF) as usize;
                 if offset >= buf.len() {
