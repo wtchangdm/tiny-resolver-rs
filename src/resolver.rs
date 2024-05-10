@@ -102,7 +102,6 @@ impl Resolver {
         let query = Message::new_query(domain, record_type);
         let addr = format!("{name_server_ip}:53");
         // port 0 = randomly picked by OS
-        // -> called `Result::unwrap()` on an `Err` value: NetworkError(Os { code: 49, kind: AddrNotAvailable, message: "Can't assign requested address" })
         let socket = UdpSocket::bind("0.0.0.0:0").map_err(Error::NetworkError)?;
         let bytes_sent = socket
             .send_to(&query.to_query_bytes(), addr)
