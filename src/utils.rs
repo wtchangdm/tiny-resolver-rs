@@ -90,14 +90,14 @@ pub(crate) fn parse_domain(buf: &[u8], start_pos: usize) -> Result<(String, usiz
 
 /// Validates whether a domain is eligible for query.
 pub(crate) fn validate_domain(domain: &str) -> Result<(), Error> {
-    // handle trailing dot of FQDN
+    // Handle trailing dot of FQDN
     let domain = domain.trim_end_matches('.');
 
-    // when we assemble a domain, we use 1 byte to indicate the length of the following label, and then the label itself.
+    // When we assemble a domain, we use 1 byte to indicate the length of the following label, and then the label itself.
     // A domain ends with a "0" byte, which takes...1 byte.
-    // if the domain is "blog.wtcx.dev", it's actually "4blog4wtcx3dev0" in the final form.
+    // If the domain is "blog.wtcx.dev", it's actually "4blog4wtcx3dev0" in the final form.
     //
-    // we will just init length with the ending zero byte here.
+    // We will just init length with the ending zero byte here.
     let mut total_len = 1;
 
     if domain.is_empty() {
