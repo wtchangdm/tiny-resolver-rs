@@ -93,7 +93,13 @@ pub(crate) fn validate_domain(domain: &str) -> Result<(), Error> {
     // handle trailing dot of FQDN
     let domain = domain.trim_end_matches('.');
 
-    if domain.is_empty() || domain.len() > 255 {
+    // when we assemble a domain, we use 1 byte to indicate the length of the following label, and then the label itself
+    // it the domain is "blog.wtcx.dev", it's actually "4blog4wtcx3dev0" in the final form.
+    //
+    // domain ends with a "0" byte, which takes...1 byte.
+    let mut total_len = 1;
+
+    if domain.is_empty() {
         return Err(Error::InvalidHostname);
     }
 
@@ -107,6 +113,14 @@ pub(crate) fn validate_domain(domain: &str) -> Result<(), Error> {
         if !label.chars().all(|c| c.is_alphanumeric() || c == '-') {
             return Err(Error::InvalidHostname);
         }
+
+        // in each interation, we will add the length byte (`1`) and the length of the label (`label.len()`)
+        // so we can check whether the final result is <= 255 bytes.
+        total_len += 1 + label.len();
+    }
+
+    if total_len > 255 {
+        return Err(Error::InvalidHostname);
     }
 
     Ok(())
@@ -152,5 +166,15 @@ mod tests {
     #[test]
     fn test_domain_with_trailing_dot() {
         assert!(validate_domain("google.com.").is_ok());
+    }
+
+    #[test]
+    fn test_domain_with_max_total_domain_length() {
+        assert!(validate_domain("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa").is_ok());
+    }
+
+    #[test]
+    fn test_domain_with_256_bytes_domain() {
+        assert!(validate_domain("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa").is_err());
     }
 }
