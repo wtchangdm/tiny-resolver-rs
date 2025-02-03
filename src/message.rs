@@ -120,7 +120,7 @@ pub struct MessageHeader {
 impl MessageHeader {
     fn with_qd_count(qd_count: u16) -> Self {
         Self {
-            id: rand::thread_rng().gen(),
+            id: rand::rng().random(),
             // For a standard query, we only care about QR & OPCODE fields.
             // And QR = 0 stands for query (1 = response); OPCODE = 0 stands for standard query (1 = inverse query, etc)
             // So we can safely put a 0 here for a question header.

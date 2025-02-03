@@ -1,8 +1,8 @@
 use crate::record::*;
 use crate::Error;
 use crate::{message::Message, utils};
-use rand::seq::SliceRandom;
-use rand::thread_rng;
+use rand::seq::IndexedRandom;
+use rand::rng;
 use std::net::Ipv4Addr;
 use std::net::UdpSocket;
 
@@ -39,7 +39,7 @@ impl Resolver {
     where
         T: Clone,
     {
-        let mut rng = thread_rng();
+        let mut rng = rng();
         let res = candicates
             .choose(&mut rng)
             .ok_or_else(|| Error::ResolverError("can't pick name server".into()))?
