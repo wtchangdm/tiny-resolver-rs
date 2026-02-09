@@ -1,4 +1,4 @@
-use rand::Rng;
+use rand::{RngExt};
 
 use crate::{utils, RecordClass, RecordType, ResourceRecord};
 use crate::{Error, NameServerError};
